@@ -1,15 +1,18 @@
 pipeline {
-	agent {
-		docker {
-			image 'node:20.10.0-alpine3.18' // Imagen de Docker
-			args '-p 3000:3000' // Puertos
-		}
-	}
-	stages {
-		stage('Build') {
-			steps {
-				sh 'npm install' // Instalar dependencias
-			}
-		}
-	}
+    agent {
+        docker {
+            image 'node:20.10.0-alpine3.18'
+            args '-p 3000:3000'
+        }
+    }
+
+    stages {
+        stage('Build') {
+            steps {
+                // Limpieza preventiva para evitar el ENOTEMPTY
+                sh 'rm -rf node_modules package-lock.json'
+                sh 'npm install'
+            }
+        }
+    }
 }
